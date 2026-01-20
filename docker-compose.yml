@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: flipkart_db
+    environment:
+      POSTGRES_USER: flipkart_user
+      POSTGRES_PASSWORD: flipkart_pass
+      POSTGRES_DB: flipkart_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flipkart_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - flipkart_network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: flipkart_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - flipkart_network
+
+  # Flask Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flipkart_app
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URL=postgresql://flipkart_user:flipkart_pass@db:5432/flipkart_db
+      - REDIS_URL=redis://redis:6379/0
+      - RATELIMIT_STORAGE_URL=redis://redis:6379/1
+      - SECRET_KEY=${SECRET_KEY:-your-super-secret-key-change-in-production}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-jwt-secret-key-change-in-production}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - flipkart_network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy (Optional but recommended for production)
+  nginx:
+    image: nginx:alpine
+    container_name: flipkart_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    networks:
+      - flipkart_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  flipkart_network:
+    driver: bridge
