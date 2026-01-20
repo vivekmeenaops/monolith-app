@@ -1,0 +1,12 @@
+vivek@Viveks-MacBook-Air Monolith-App % docker logs flipkart_app
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
+/usr/local/bin/python3.11: can't open file '/root/.local/bin/gunicorn': [Errno 13] Permission denied
