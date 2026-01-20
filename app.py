@@ -1,6 +1,6 @@
 """Main Flask application."""
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
@@ -58,10 +58,16 @@ def create_app(config_name=None):
             'version': '1.0.0'
         }), 200
     
-    # Root endpoint
+    # Root endpoint - Serve frontend
     @app.route('/', methods=['GET'])
     def index():
-        """Root endpoint."""
+        """Serve the frontend application."""
+        return render_template('index.html')
+    
+    # API Info endpoint
+    @app.route('/api', methods=['GET'])
+    def api_info():
+        """API information endpoint."""
         return jsonify({
             'message': 'Welcome to Flipkart Monolith API',
             'version': '1.0.0',
